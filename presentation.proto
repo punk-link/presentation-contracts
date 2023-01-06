@@ -21,23 +21,25 @@ message ArtistRequest {
 
 message Artist {
     int32 Id = 1;
-    ImageDetails ImageDetails = 2;
-	int32 LabelId = 3;
-    string Name = 4;
-    repeated Release Releases = 5;
+    string Name = 2;
+    repeated SlimRelease Releases = 3;
+}
+
+message PlatformUrl {
+    string PlatformId = 1;
+    string Url = 2;
 }
 
 message Release {
 	int32 Id = 1;
-    repeated SlimArtist FeaturingArtists = 2;
-    ImageDetails ImageDetails = 3;
-    string Label = 4;
-    string Name = 5;
+    ImageDetails ImageDetails = 2;
+    string Label = 3;
+    string Name = 4;
+    repeated PlatformUrl PlatformUrls = 5;
     repeated SlimArtist ReleaseArtists = 6;
     google.protobuf.Timestamp ReleaseDate = 7;
-    int32 TrackNumber = 8;
-    repeated Track Tracks = 9;
-    string Type = 10;
+    repeated Track Tracks = 8;
+    string Type = 9;
 }
 
 message ReleaseRequest {
@@ -49,6 +51,14 @@ message SlimArtist {
 	int32 LabelId = 2;
     string Name = 3;
     ImageDetails ImageDetails = 4;
+}
+
+message SlimRelease {
+    int32 Id = 1;
+    ImageDetails ImageDetails = 2;
+    string Name = 3;
+    google.protobuf.Timestamp ReleaseDate = 4;
+    string Type = 5;
 }
 
 message Track {
