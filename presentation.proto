@@ -48,9 +48,7 @@ message ReleaseRequest {
 
 message SlimArtist {
     int32 Id = 1;
-	int32 LabelId = 2;
-    string Name = 3;
-    ImageDetails ImageDetails = 4;
+    string Name = 2;
 }
 
 message SlimRelease {
