@@ -32,14 +32,16 @@ message PlatformUrl {
 
 message Release {
 	int32 Id = 1;
-    ImageDetails ImageDetails = 2;
-    string Label = 3;
-    string Name = 4;
-    repeated PlatformUrl PlatformUrls = 5;
-    repeated SlimArtist ReleaseArtists = 6;
-    google.protobuf.Timestamp ReleaseDate = 7;
-    repeated Track Tracks = 8;
-    string Type = 9;
+    string Description = 2;
+    ImageDetails ImageDetails = 3;
+    string Label = 4;
+    string Name = 5;
+    repeated PlatformUrl PlatformUrls = 6;
+    repeated SlimArtist ReleaseArtists = 7;
+    google.protobuf.Timestamp ReleaseDate = 8;
+    repeated string Tags = 9;
+    repeated Track Tracks = 10;
+    string Type = 11;
 }
 
 message ReleaseRequest {
