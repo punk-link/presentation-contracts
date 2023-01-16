@@ -4,6 +4,7 @@ import "google/protobuf/timestamp.proto";
 option go_package = "./presentationContracts";
 
 service Presentation {
+    rpc CheckHealth(HealthCheckRequest) returns (HealthCheckResponse) {}
     rpc GetArtist (ArtistRequest) returns (Artist) {}
     rpc GetRelease (ReleaseRequest) returns (Release) {}
 }
@@ -23,6 +24,12 @@ message Artist {
     int32 Id = 1;
     string Name = 2;
     repeated SlimRelease Releases = 3;
+}
+
+message HealthCheckResponse {
+}
+
+message HealthCheckRequest {
 }
 
 message PlatformUrl {

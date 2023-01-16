@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PresentationClient interface {
+	CheckHealth(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error)
 	GetArtist(ctx context.Context, in *ArtistRequest, opts ...grpc.CallOption) (*Artist, error)
 	GetRelease(ctx context.Context, in *ReleaseRequest, opts ...grpc.CallOption) (*Release, error)
 }
@@ -32,6 +33,15 @@ type presentationClient struct {
 
 func NewPresentationClient(cc grpc.ClientConnInterface) PresentationClient {
 	return &presentationClient{cc}
+}
+
+func (c *presentationClient) CheckHealth(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error) {
+	out := new(HealthCheckResponse)
+	err := c.cc.Invoke(ctx, "/Presentation/CheckHealth", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *presentationClient) GetArtist(ctx context.Context, in *ArtistRequest, opts ...grpc.CallOption) (*Artist, error) {
@@ -56,6 +66,7 @@ func (c *presentationClient) GetRelease(ctx context.Context, in *ReleaseRequest,
 // All implementations must embed UnimplementedPresentationServer
 // for forward compatibility
 type PresentationServer interface {
+	CheckHealth(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
 	GetArtist(context.Context, *ArtistRequest) (*Artist, error)
 	GetRelease(context.Context, *ReleaseRequest) (*Release, error)
 	mustEmbedUnimplementedPresentationServer()
@@ -65,6 +76,9 @@ type PresentationServer interface {
 type UnimplementedPresentationServer struct {
 }
 
+func (UnimplementedPresentationServer) CheckHealth(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckHealth not implemented")
+}
 func (UnimplementedPresentationServer) GetArtist(context.Context, *ArtistRequest) (*Artist, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArtist not implemented")
 }
@@ -82,6 +96,24 @@ type UnsafePresentationServer interface {
 
 func RegisterPresentationServer(s grpc.ServiceRegistrar, srv PresentationServer) {
 	s.RegisterService(&Presentation_ServiceDesc, srv)
+}
+
+func _Presentation_CheckHealth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HealthCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PresentationServer).CheckHealth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Presentation/CheckHealth",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PresentationServer).CheckHealth(ctx, req.(*HealthCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Presentation_GetArtist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -127,6 +159,10 @@ var Presentation_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "Presentation",
 	HandlerType: (*PresentationServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CheckHealth",
+			Handler:    _Presentation_CheckHealth_Handler,
+		},
 		{
 			MethodName: "GetArtist",
 			Handler:    _Presentation_GetArtist_Handler,
