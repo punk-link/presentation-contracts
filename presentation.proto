@@ -26,6 +26,11 @@ message Artist {
     repeated SlimRelease Releases = 3;
 }
 
+message ArtistStats {
+    int32 CompilationNumber = 1;
+    int32 SoleReleaseNumber = 2;
+}
+
 message HealthCheckResponse {
 }
 
@@ -49,6 +54,7 @@ message Release {
     repeated string Tags = 9;
     repeated Track Tracks = 10;
     string Type = 11;
+    ArtistStats ArtistStats = 12;
 }
 
 message ReleaseRequest {
