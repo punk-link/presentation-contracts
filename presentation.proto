@@ -9,26 +9,22 @@ service Presentation {
     rpc GetRelease (ReleaseRequest) returns (Release) {}
 }
 
-message ImageDetails {
-    string AltText = 1;
-    int32 Height = 2;
-    string Url = 3;
-    int32 Width = 4;
+message Artist {
+    int32 Id = 1;
+    string Name = 2;
+    PresentationConfig PresentationConfig = 3;
+    repeated SlimRelease Releases = 4;
+    ReleaseStats ReleaseStats = 5;
+    repeated ArtistSocialNetwork SocialNetworks = 6;
 }
 
 message ArtistRequest {
     int32 Id = 1;
 }
 
-message Artist {
-    int32 Id = 1;
-    string Name = 2;
-    repeated SlimRelease Releases = 3;
-}
-
-message ArtistStats {
-    int32 CompilationNumber = 1;
-    int32 SoleReleaseNumber = 2;
+message ArtistSocialNetwork {
+    string Id = 1;
+    string Url = 2;
 }
 
 message HealthCheckResponse {
@@ -37,9 +33,20 @@ message HealthCheckResponse {
 message HealthCheckRequest {
 }
 
+message ImageDetails {
+    string AltText = 1;
+    int32 Height = 2;
+    string Url = 3;
+    int32 Width = 4;
+}
+
 message PlatformUrl {
     string PlatformId = 1;
     string Url = 2;
+}
+
+message PresentationConfig {
+    repeated string ShareableSocialNetworkIds = 1;
 }
 
 message Release {
@@ -49,16 +56,23 @@ message Release {
     string Label = 4;
     string Name = 5;
     repeated PlatformUrl PlatformUrls = 6;
-    repeated SlimArtist ReleaseArtists = 7;
-    google.protobuf.Timestamp ReleaseDate = 8;
-    repeated string Tags = 9;
-    repeated Track Tracks = 10;
-    string Type = 11;
-    ArtistStats ArtistStats = 12;
+    PresentationConfig PresentationConfig = 7;
+    repeated SlimArtist ReleaseArtists = 8;
+    ReleaseStats ReleaseStats = 9;
+    google.protobuf.Timestamp ReleaseDate = 10;
+    repeated string Tags = 11;
+    repeated Track Tracks = 12;
+    string Type = 13;
 }
 
 message ReleaseRequest {
     int32 Id = 1;
+}
+
+message ReleaseStats {
+    int32 AlbumNumber = 1;
+    int32 CompilationNumber = 2;
+    int32 SingleNumber = 3;
 }
 
 message SlimArtist {
